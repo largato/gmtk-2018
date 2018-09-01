@@ -1,8 +1,13 @@
+dist: trusty
 language: rust
+
 rust:
   - stable
 
 before_install:
-  - sudo apt-get install build-essential xorg-dev libudev-dev libts-dev libgl1-mesa-dev libglu1-mesa-dev libasound2-dev libpulse-dev libopenal-dev libogg-dev libvorbis-dev libaudiofile-dev libpng12-dev libfreetype6-dev libusb-dev libdbus-1-dev zlib1g-dev libdirectfb-dev
-  - sudo apt install software-properties-common g++ make libasound2-dev libsdl2-dev
+  - sudo apt-get update
+  - sudo apt-get install -y software-properties-common
+  - sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) main universe restricted multiverse"
+  - sudo apt-get update
+  - sudo apt-get -y install libegl1-mesa-dev libgles2-mesa-dev libglu1-mesa libglu1-mesa-dev libasound2-dev libsdl2-dev
   - sudo ldconfig
