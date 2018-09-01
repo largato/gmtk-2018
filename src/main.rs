@@ -1,23 +1,33 @@
 extern crate ggez;
 
+use ggez::graphics::{Rect, Color};
 use ggez::event::{Axis, Button, Keycode, Mod};
 use ggez::*;
 
-mod scene;
+mod actor;
 mod helloscene;
+mod scene;
+mod ship;
 
 use scene::*;
 use helloscene::*;
+use ship::*;
 
 struct MainState {
     scene_manager: SceneManager
 }
 
 impl MainState {
-    fn new(_ctx: &mut Context) -> GameResult<MainState> {
+    fn new(ctx: &mut Context) -> GameResult<MainState> {
+        let player_rect = Rect::new(100.0, 100.0, 20.0, 30.0);
+
         let s = MainState {
             scene_manager: SceneManager {
-                current: Box::new(HelloScene { pos_x: 0.0, pos_y: 0.0 })
+                current: Box::new(HelloScene {
+                    player: Ship::build_player(ctx,
+                                               Color::from_rgb(255, 0, 0),
+                                               player_rect),
+                })
             },
         };
 
