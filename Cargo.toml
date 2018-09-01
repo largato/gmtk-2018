@@ -1,7 +1,11 @@
 [package]
 name = "gmtk-2018"
 version = "0.1.0"
-authors = ["Luiz Carlos Cavalcanti <cavalcanti.luiz@gmail.com>", "Roger Zanoni <rogerzanoni@gmail.com>", "Felipe Fonseca <cabralff@gmail.com>"]
+authors = [
+    "Luiz Carlos Cavalcanti <cavalcanti.luiz@gmail.com>",
+    "Roger Zanoni <rogerzanoni@gmail.com>",
+    "Felipe Fonseca <cabralff@gmail.com>"
+]
 
 [dependencies]
 ggez = "0.4"
