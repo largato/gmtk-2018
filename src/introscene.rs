@@ -1,5 +1,6 @@
 extern crate ggez;
 
+use ggez::event::{Button, Keycode, Mod};
 use ggez::*;
 
 use scene::*;
@@ -10,8 +11,14 @@ pub struct IntroScene {
 }
 
 impl Scene for IntroScene {
-    fn update(&mut self, _ctx: &mut Context) {
-        // Countdown
+    fn update(&mut self, ctx: &mut Context) {
+        let time_elapsed = timer::get_delta(ctx).subsec_millis() as u32;
+
+        if time_elapsed < self.duration {
+            self.duration -= time_elapsed;
+        } else {
+            // End scene
+        }
     }
 
     fn draw(&mut self, ctx: &mut Context) {
@@ -40,10 +47,10 @@ impl Scene for IntroScene {
 }
 
 impl IntroScene {
-    pub fn build_intro(ctx: &mut Context, duration: u32) -> IntroScene {
+    pub fn build_scene(ctx: &mut Context) -> IntroScene {
         let img = graphics::Image::new(ctx, "/sprites/largato_logo.png").unwrap();
         IntroScene {
-            duration: duration,
+            duration: 10_000,
             image: img,
         }
     }
