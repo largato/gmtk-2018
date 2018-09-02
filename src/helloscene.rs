@@ -31,24 +31,45 @@ impl HelloScene {
         }
     }
 
-    fn update_player_pos(&mut self) {
+    fn update_player_pos(&mut self, ctx: &mut Context) {
+        let mut new_x: f32 = self.player.pos_x();
+        let mut new_y: f32 = self.player.pos_y();
+
         if self.left_pressed {
-            self.player.pos.x -= self.player.horizontal_speed;
+            new_x = self.player.pos_x() - self.player.horizontal_speed;
         } else if self.right_pressed {
-            self.player.pos.x += self.player.horizontal_speed;
+            new_x = self.player.pos_x() + self.player.horizontal_speed;
         }
 
         if self.up_pressed {
-            self.player.pos.y -= self.player.vertical_speed;
+            new_y = self.player.pos_y() - self.player.vertical_speed;
         } else if self.down_pressed {
-            self.player.pos.y += self.player.vertical_speed;
+            new_y = self.player.pos_y() + self.player.vertical_speed;
         }
+
+        let screen_width = ctx.conf.window_mode.width as f32;
+        let screen_height = ctx.conf.window_mode.height as f32;
+
+        if new_x < 0.0 {
+            new_x = 0.0;
+        } else if new_x + self.player.bounding_rect.w > screen_width {
+            new_x = screen_width - self.player.bounding_rect.w;
+        }
+
+        if new_y < 0.0 {
+            new_y = 0.0;
+        } else if new_y + self.player.bounding_rect.h > screen_height {
+            new_y = screen_height - self.player.bounding_rect.h;
+        }
+
+        self.player.set_pos_x(new_x);
+        self.player.set_pos_y(new_y);
     }
 }
 
 impl Scene for HelloScene {
     fn update(&mut self, ctx: &mut Context) {
-        self.update_player_pos();
+        self.update_player_pos(ctx);
 
         self.player.update(ctx);
     }
