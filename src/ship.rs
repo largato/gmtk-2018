@@ -7,6 +7,8 @@ pub struct Ship {
     pub pos: Point2,
     pub color: Color,
     pub shape: Mesh,
+    pub horizontal_speed: f32,
+    pub vertical_speed: f32,
 }
 
 impl Actor for Ship {
@@ -17,10 +19,12 @@ impl Actor for Ship {
 }
 
 impl Ship {
-    pub fn build_player(ctx: &mut Context, color: Color, rect: Rect) -> Ship {
+    pub fn build_player(ctx: &mut Context, color: Color, horizontal_speed: f32, vertical_speed: f32, rect: Rect) -> Ship {
         Ship {
             pos: Point2::new(rect.x, rect.y),
             color: color,
+            horizontal_speed: horizontal_speed,
+            vertical_speed: vertical_speed,
             shape:  MeshBuilder::new()
                 .line(&[
                       Point2::new(rect.left(), rect.bottom()),
