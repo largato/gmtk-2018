@@ -1,6 +1,7 @@
 extern crate ggez;
 
 use ggez::event::{Axis, Button, Keycode, Mod};
+use ggez::graphics::{Color, Rect};
 use ggez::*;
 
 use std::process;
@@ -10,15 +11,26 @@ use scene::*;
 use ship::*;
 
 pub struct HelloScene {
-    pub player: Ship,
-
-    pub up_pressed: bool,
-    pub down_pressed: bool,
-    pub left_pressed: bool,
-    pub right_pressed: bool,
+    player: Ship,
+    up_pressed: bool,
+    down_pressed: bool,
+    left_pressed: bool,
+    right_pressed: bool,
 }
 
 impl HelloScene {
+    pub fn build_scene(ctx: &mut Context) -> HelloScene {
+        let player_rect = Rect::new(100.0, 100.0, 20.0, 30.0);
+
+        HelloScene {
+            player: Ship::build_player(ctx, Color::from_rgb(255, 0, 0), 0.1, 0.08, player_rect),
+            up_pressed: false,
+            down_pressed: false,
+            left_pressed: false,
+            right_pressed: false,
+        }
+    }
+
     fn update_player_pos(&mut self) {
         if self.left_pressed {
             self.player.pos.x -= self.player.horizontal_speed;
@@ -32,8 +44,6 @@ impl HelloScene {
             self.player.pos.y += self.player.vertical_speed;
         }
     }
-
-
 }
 
 impl Scene for HelloScene {

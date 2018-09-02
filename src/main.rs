@@ -1,7 +1,6 @@
 extern crate ggez;
 
 use ggez::event::{Axis, Button, Keycode, Mod};
-use ggez::graphics::{Color, Rect};
 use ggez::*;
 use std::env;
 use std::path;
@@ -13,7 +12,6 @@ mod ship;
 
 use helloscene::*;
 use scene::*;
-use ship::*;
 
 struct MainState {
     scene_manager: SceneManager,
@@ -21,20 +19,9 @@ struct MainState {
 
 impl MainState {
     fn new(ctx: &mut Context) -> GameResult<MainState> {
-        let player_rect = Rect::new(100.0, 100.0, 20.0, 30.0);
-
         let s = MainState {
             scene_manager: SceneManager {
-                current: Box::new(HelloScene {
-                    player: Ship::build_player(ctx,
-                                               Color::from_rgb(255, 0, 0),
-                                               0.1, 0.08,
-                                               player_rect),
-                    up_pressed: false,
-                    down_pressed: false,
-                    left_pressed: false,
-                    right_pressed: false,
-                })
+                current: Box::new(HelloScene::build_scene(ctx)),
             },
         };
 
@@ -58,23 +45,33 @@ impl event::EventHandler for MainState {
     }
 
     fn key_down_event(&mut self, ctx: &mut Context, keycode: Keycode, keymod: Mod, repeat: bool) {
-        self.scene_manager.current.on_key_down(ctx, keycode, keymod, repeat);
+        self.scene_manager
+            .current
+            .on_key_down(ctx, keycode, keymod, repeat);
     }
 
     fn key_up_event(&mut self, ctx: &mut Context, keycode: Keycode, keymod: Mod, repeat: bool) {
-        self.scene_manager.current.on_key_up(ctx, keycode, keymod, repeat);
+        self.scene_manager
+            .current
+            .on_key_up(ctx, keycode, keymod, repeat);
     }
 
     fn controller_button_down_event(&mut self, ctx: &mut Context, btn: Button, ctrl_id: i32) {
-        self.scene_manager.current.on_controller_button_down(ctx, btn, ctrl_id);
+        self.scene_manager
+            .current
+            .on_controller_button_down(ctx, btn, ctrl_id);
     }
 
     fn controller_button_up_event(&mut self, ctx: &mut Context, btn: Button, ctrl_id: i32) {
-        self.scene_manager.current.on_controller_button_up(ctx, btn, ctrl_id);
+        self.scene_manager
+            .current
+            .on_controller_button_up(ctx, btn, ctrl_id);
     }
 
     fn controller_axis_event(&mut self, ctx: &mut Context, axis: Axis, value: i16, ctrl_id: i32) {
-        self.scene_manager.current.on_controller_axis(ctx, axis, value, ctrl_id);
+        self.scene_manager
+            .current
+            .on_controller_axis(ctx, axis, value, ctrl_id);
     }
 
     fn focus_event(&mut self, _ctx: &mut Context, gained: bool) {
