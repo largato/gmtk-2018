@@ -20,11 +20,11 @@ struct MainState {
 
 impl MainState {
     fn new(ctx: &mut Context) -> GameResult<MainState> {
-        let s = MainState {
-            scene_manager: SceneManager {
-                current: Box::new(HelloScene::build_scene(ctx)),
-            },
+        let mut s = MainState {
+            scene_manager: SceneManager::build_manager(),
         };
+
+        s.scene_manager.push(Box::new(HelloScene::build_scene(ctx)));
 
         Ok(s)
     }
@@ -46,32 +46,25 @@ impl event::EventHandler for MainState {
     }
 
     fn key_down_event(&mut self, ctx: &mut Context, keycode: Keycode, keymod: Mod, repeat: bool) {
-        self.scene_manager
-            .current
-            .on_key_down(ctx, keycode, keymod, repeat);
+        self.scene_manager.on_key_down(ctx, keycode, keymod, repeat);
     }
 
     fn key_up_event(&mut self, ctx: &mut Context, keycode: Keycode, keymod: Mod, repeat: bool) {
-        self.scene_manager
-            .current
-            .on_key_up(ctx, keycode, keymod, repeat);
+        self.scene_manager.on_key_up(ctx, keycode, keymod, repeat);
     }
 
     fn controller_button_down_event(&mut self, ctx: &mut Context, btn: Button, ctrl_id: i32) {
         self.scene_manager
-            .current
             .on_controller_button_down(ctx, btn, ctrl_id);
     }
 
     fn controller_button_up_event(&mut self, ctx: &mut Context, btn: Button, ctrl_id: i32) {
         self.scene_manager
-            .current
             .on_controller_button_up(ctx, btn, ctrl_id);
     }
 
     fn controller_axis_event(&mut self, ctx: &mut Context, axis: Axis, value: i16, ctrl_id: i32) {
         self.scene_manager
-            .current
             .on_controller_axis(ctx, axis, value, ctrl_id);
     }
 
