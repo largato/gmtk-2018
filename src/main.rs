@@ -7,6 +7,7 @@ use std::path;
 
 mod actor;
 mod helloscene;
+mod introscene;
 mod scene;
 mod ship;
 
