@@ -23,7 +23,7 @@ impl HelloScene {
         let player_rect = Rect::new(100.0, 100.0, 20.0, 30.0);
 
         HelloScene {
-            player: Ship::build_player(ctx, Color::from_rgb(255, 0, 0), 0.1, 0.08, player_rect),
+            player: Ship::build_player(ctx, Color::from_rgb(255, 0, 0), 3.5, 3.5, player_rect),
             up_pressed: false,
             down_pressed: false,
             left_pressed: false,
@@ -102,6 +102,20 @@ impl Scene for HelloScene {
     fn on_controller_button_down(&mut self, _ctx: &mut Context, btn: Button, _ctrl_id: i32) {
         match btn {
             Button::A => (), // Shoot! pew pew!
+            Button::DPadUp => self.up_pressed = true,
+            Button::DPadDown => self.down_pressed = true,
+            Button::DPadLeft => self.left_pressed = true,
+            Button::DPadRight => self.right_pressed = true,
+            _ => (),
+        }
+    }
+
+    fn on_controller_button_up(&mut self, _ctx: &mut Context, btn: Button, ctrl_id: i32) {
+        match btn {
+            Button::DPadUp => self.up_pressed = false,
+            Button::DPadDown => self.down_pressed = false,
+            Button::DPadLeft => self.left_pressed = false,
+            Button::DPadRight => self.right_pressed = false,
             _ => (),
         }
     }
@@ -109,12 +123,12 @@ impl Scene for HelloScene {
     fn on_controller_axis(&mut self, _ctx: &mut Context, axis: Axis, value: i16, _ctrl_id: i32) {
         match axis {
             Axis::LeftX => {
-                self.right_pressed = value > 7500;
-                self.left_pressed = value < -7500;
+                self.right_pressed = value > 1000;
+                self.left_pressed = value < -1000;
             }
             Axis::LeftY => {
-                self.down_pressed = value > 7500;
-                self.up_pressed = value < -7500;
+                self.down_pressed = value > 1000;
+                self.up_pressed = value < -1000;
             }
             _ => (),
         }
