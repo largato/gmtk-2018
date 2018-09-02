@@ -1,4 +1,4 @@
-use ggez::graphics::{Color, Mesh, MeshBuilder, Point2, Rect};
+use ggez::graphics::{Color, DrawMode, Mesh, MeshBuilder, Point2, Rect};
 use ggez::*;
 
 use actor::*;
@@ -39,6 +39,33 @@ impl Ship {
                         Point2::new(0.0, rect.h),
                     ],
                     4.0,
+                )
+                .build(ctx)
+                .unwrap(),
+            bounding_rect: rect,
+        }
+    }
+
+    pub fn build_enemy(
+        ctx: &mut Context,
+        color: Color,
+        horizontal_speed: f32,
+        vertical_speed: f32,
+        rect: Rect,
+    ) -> Ship {
+        Ship {
+            color: color,
+            horizontal_speed: horizontal_speed,
+            vertical_speed: vertical_speed,
+            shape: MeshBuilder::new()
+                .polygon(
+                    DrawMode::Fill,
+                    &[
+                        Point2::new(0.0, 0.0),
+                        Point2::new(rect.w, 0.0),
+                        Point2::new(rect.w, rect.h),
+                        Point2::new(0.0, rect.h),
+                    ],
                 )
                 .build(ctx)
                 .unwrap(),

@@ -4,7 +4,9 @@ use ggez::event::{Axis, Button, Keycode, Mod};
 use ggez::graphics::{Color, Rect};
 use ggez::*;
 
+use std::boxed::Box;
 use std::process;
+use std::vec::Vec;
 
 use actor::*;
 use scene::*;
@@ -16,11 +18,33 @@ pub struct HelloScene {
     down_pressed: bool,
     left_pressed: bool,
     right_pressed: bool,
+    actors: Vec<Box<Actor>>,
 }
 
 impl HelloScene {
     pub fn build_scene(ctx: &mut Context) -> HelloScene {
-        let player_rect = Rect::new(100.0, 100.0, 20.0, 30.0);
+        let screen_width = ctx.conf.window_mode.width as f32;
+        let screen_height = ctx.conf.window_mode.height as f32;
+        let player_rect = Rect::new(screen_width / 2.0 - 10.0, screen_height - 60.0, 20.0, 30.0);
+
+        let mut actors: Vec<Box<Actor>> = Vec::new();
+        let h_enemies = 20;
+        let v_enemies = 10;
+        let h_space = screen_width / h_enemies as f32;
+        let v_space = screen_height * 0.4 / v_enemies as f32;
+
+        for x in 1..h_enemies - 1 {
+            for y in 1..v_enemies - 1 {
+                let enemy_rect = Rect::new(x as f32 * h_space, y as f32 * v_space, 15.0, 15.0);
+                actors.push(Box::new(Ship::build_enemy(
+                    ctx,
+                    Color::from_rgb(0, 255, 0),
+                    0.1,
+                    0.08,
+                    enemy_rect,
+                )));
+            }
+        }
 
         HelloScene {
             player: Ship::build_player(ctx, Color::from_rgb(255, 0, 0), 3.5, 3.5, player_rect),
@@ -28,6 +52,7 @@ impl HelloScene {
             down_pressed: false,
             left_pressed: false,
             right_pressed: false,
+            actors: actors,
         }
     }
 
@@ -69,12 +94,20 @@ impl HelloScene {
 
 impl Scene for HelloScene {
     fn update(&mut self, ctx: &mut Context) {
+        for actor in &mut self.actors {
+            actor.update(ctx);
+        }
+
         self.update_player_pos(ctx);
 
         self.player.update(ctx);
     }
 
     fn draw(&mut self, ctx: &mut Context) {
+        for actor in &mut self.actors {
+            actor.draw(ctx);
+        }
+
         self.player.draw(ctx);
     }
 
