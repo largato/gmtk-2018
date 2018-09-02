@@ -26,7 +26,12 @@ impl MainState {
                 current: Box::new(HelloScene {
                     player: Ship::build_player(ctx,
                                                Color::from_rgb(255, 0, 0),
+                                               0.1, 0.08,
                                                player_rect),
+                    up_pressed: false,
+                    down_pressed: false,
+                    left_pressed: false,
+                    right_pressed: false,
                 })
             },
         };
