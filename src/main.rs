@@ -1,20 +1,22 @@
 extern crate ggez;
 
-use ggez::graphics::{Rect, Color};
 use ggez::event::{Axis, Button, Keycode, Mod};
+use ggez::graphics::{Color, Rect};
 use ggez::*;
+use std::env;
+use std::path;
 
 mod actor;
 mod helloscene;
 mod scene;
 mod ship;
 
-use scene::*;
 use helloscene::*;
+use scene::*;
 use ship::*;
 
 struct MainState {
-    scene_manager: SceneManager
+    scene_manager: SceneManager,
 }
 
 impl MainState {
@@ -85,8 +87,18 @@ impl event::EventHandler for MainState {
 }
 
 pub fn main() {
-    let c = conf::Conf::new();
-    let ctx = &mut Context::load_from_conf("super_simple", "ggez", c).unwrap();
+    let mut cb = ContextBuilder::new("astroblasto", "ggez")
+        .window_setup(conf::WindowSetup::default().title("JOGO SEM NOME!"))
+        .window_mode(conf::WindowMode::default().dimensions(800, 600));
+
+    // Add project root to search path
+    if let Ok(manifest_dir) = env::var("CARGO_MANIFEST_DIR") {
+        let mut path = path::PathBuf::from(manifest_dir);
+        path.push("resources");
+        cb = cb.add_resource_path(path);
+    }
+
+    let ctx = &mut cb.build().unwrap();
     let state = &mut MainState::new(ctx).unwrap();
     event::run(ctx, state).unwrap();
 }
