@@ -6,6 +6,7 @@ use std::env;
 use std::path;
 
 mod actor;
+mod bullet;
 mod helloscene;
 mod introscene;
 mod scene;

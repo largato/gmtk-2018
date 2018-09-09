@@ -9,6 +9,7 @@ use std::process;
 use std::vec::Vec;
 
 use actor::*;
+use bullet::*;
 use scene::*;
 use ship::*;
 
@@ -90,10 +91,26 @@ impl HelloScene {
         self.player.set_pos_x(new_x);
         self.player.set_pos_y(new_y);
     }
+
+    fn shoot(&mut self, ctx: &mut Context) {
+        let bullet_rect = Rect::new(
+            self.player.pos_x() + self.player.bounding_rect.w / 2.0,
+            self.player.pos_y() - 5.0,
+            5.0,
+            5.0,
+        );
+        self.actors.push(Box::new(Bullet::build_bullet(
+            ctx,
+            Color::from_rgb(255, 255, 255),
+            -8.0,
+            bullet_rect,
+        )))
+    }
 }
 
 impl Scene for HelloScene {
     fn update(&mut self, ctx: &mut Context) {
+        // TODO: remove bullets on collisions and when they exit screen
         for actor in &mut self.actors {
             actor.update(ctx);
         }
@@ -111,8 +128,9 @@ impl Scene for HelloScene {
         self.player.draw(ctx);
     }
 
-    fn on_key_down(&mut self, _ctx: &mut Context, keycode: Keycode, _keymod: Mod, _repeat: bool) {
+    fn on_key_down(&mut self, ctx: &mut Context, keycode: Keycode, _keymod: Mod, _repeat: bool) {
         match keycode {
+            Keycode::Space => self.shoot(ctx),
             Keycode::Up => self.up_pressed = true,
             Keycode::Down => self.down_pressed = true,
             Keycode::Left => self.left_pressed = true,
@@ -132,9 +150,9 @@ impl Scene for HelloScene {
         }
     }
 
-    fn on_controller_button_down(&mut self, _ctx: &mut Context, btn: Button, _ctrl_id: i32) {
+    fn on_controller_button_down(&mut self, ctx: &mut Context, btn: Button, _ctrl_id: i32) {
         match btn {
-            Button::A => (), // Shoot! pew pew!
+            Button::A => self.shoot(ctx),
             Button::DPadUp => self.up_pressed = true,
             Button::DPadDown => self.down_pressed = true,
             Button::DPadLeft => self.left_pressed = true,
